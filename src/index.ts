@@ -10,11 +10,12 @@ import puppeteer from 'puppeteer';
 				'--no-sandbox'
 			]
 		});
-		const page = await browser.newPage();
+		const context = await browser.createIncognitoBrowserContext();
+		const incognitoPage = await context.newPage();
 
-		await page.goto('https://www.zillow.com/homedetails/2189-Gayle-Ave-Memphis-TN-38127/42228852_zpid/');
+		await incognitoPage.goto('https://www.zillow.com/homedetails/2189-Gayle-Ave-Memphis-TN-38127/42228852_zpid/');
 
-		await page.waitFor(2500);
+		await incognitoPage.waitFor(2500);
 
 
 		await browser.close();
