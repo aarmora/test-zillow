@@ -5,6 +5,7 @@ import puppeteer from 'puppeteer';
 	for (let i = 0; i < 10; i++) {
 		const browser = await puppeteer.launch({
 			headless: false,
+			ignoreHTTPSErrors: true,
 			args: [
 				'--no-sandbox'
 			]
