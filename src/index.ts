@@ -7,7 +7,7 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 	puppeteerExtra.use(pluginStealth());
 	const browser = await puppeteerExtra.launch({
 		headless: true,
-		// ignoreHTTPSErrors: true,
+		ignoreHTTPSErrors: true,
 		args: [
 			'--no-sandbox'
 		]
@@ -16,6 +16,8 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 	for (let i = 0; i < 10; i++) {
 		const context = await browser.createIncognitoBrowserContext();
 		const incognitoPage = await context.newPage();
+
+		await incognitoPage.goto('https://duckduckgo.com/?q=2189+gayle+ave+memphis&ia=maps');
 
 		await incognitoPage.goto('https://www.zillow.com/homedetails/2189-Gayle-Ave-Memphis-TN-38127/42228852_zpid/');
 
