@@ -1,15 +1,15 @@
 import puppeteer from 'puppeteer';
 
 (async () => {
+	const browser = await puppeteer.launch({
+		headless: false,
+		ignoreHTTPSErrors: true,
+		args: [
+			'--no-sandbox'
+		]
+	});
 
 	for (let i = 0; i < 10; i++) {
-		const browser = await puppeteer.launch({
-			headless: false,
-			ignoreHTTPSErrors: true,
-			args: [
-				'--no-sandbox'
-			]
-		});
 		const context = await browser.createIncognitoBrowserContext();
 		const incognitoPage = await context.newPage();
 
@@ -20,8 +20,8 @@ import puppeteer from 'puppeteer';
 		await incognitoPage.waitFor(2500);
 
 
-		await browser.close();
 	}
 
+	await browser.close();
 
 })();
