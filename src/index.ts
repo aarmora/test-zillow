@@ -1,9 +1,13 @@
 import puppeteer from 'puppeteer';
 
+const puppeteerExtra = require('puppeteer-extra');
+const pluginStealth = require('puppeteer-extra-plugin-stealth');
+
 (async () => {
-	const browser = await puppeteer.launch({
-		headless: false,
-		ignoreHTTPSErrors: true,
+	puppeteerExtra.use(pluginStealth());
+	const browser = await puppeteerExtra.launch({
+		headless: true,
+		// ignoreHTTPSErrors: true,
 		args: [
 			'--no-sandbox'
 		]
@@ -13,13 +17,22 @@ import puppeteer from 'puppeteer';
 		const context = await browser.createIncognitoBrowserContext();
 		const incognitoPage = await context.newPage();
 
-		await incognitoPage.goto('https://duckduckgo.com/?q=2189+gayle+ave+memphis&ia=maps');
-
 		await incognitoPage.goto('https://www.zillow.com/homedetails/2189-Gayle-Ave-Memphis-TN-38127/42228852_zpid/');
 
-		await incognitoPage.waitFor(2500);
+		try {
+			await incognitoPage.waitForSelector('title', { timeout: 2500 });
+		}
+		catch (e) {
+			console.log('No title found');
+			await incognitoPage.close();
+			continue;
+		}
 
+		const title = await incognitoPage.$eval('title', element => element.textContent);
 
+		console.log('title', title);
+
+		await incognitoPage.close();
 	}
 
 	await browser.close();
