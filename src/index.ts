@@ -1,7 +1,11 @@
-import puppeteer, { Page } from 'puppeteer';
+import { Page } from 'puppeteer';
+
+import * as dotenv from 'dotenv';
 
 const puppeteerExtra = require('puppeteer-extra');
 const pluginStealth = require('puppeteer-extra-plugin-stealth');
+
+dotenv.config();
 
 (async () => {
 	puppeteerExtra.use(pluginStealth());
@@ -9,13 +13,19 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 		headless: true,
 		ignoreHTTPSErrors: true,
 		args: [
-			'--no-sandbox'
+			'--no-sandbox',
+			'--proxy-server=zproxy.lum-superproxy.io:22225'
 		]
 	});
 
 	for (let i = 0; i < 10; i++) {
 		const context = await browser.createIncognitoBrowserContext();
 		const incognitoPage = await context.newPage();
+
+		await incognitoPage.authenticate({
+			username: process.env.luminatiUsername,
+			password: process.env.luminatiPassword
+		});
 
 		await incognitoPage.goto('https://duckduckgo.com/?q=2189+gayle+ave+memphis&ia=maps');
 
