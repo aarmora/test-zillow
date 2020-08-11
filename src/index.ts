@@ -51,16 +51,16 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 		}
 
 
-		// let property: any;
-		// try {
-		// 	property = await fetchZillowPropertyData(parseInt(zpid), incognitoPage);
-		// }
-		// catch (e) {
-		// 	console.log('error fetching zillow from zillow.', e);
-		// 	continue;
-		// }
+		let property: any;
+		try {
+			property = await fetchZillowPropertyData(parseInt(zpid), incognitoPage);
+		}
+		catch (e) {
+			console.log('error fetching zillow from zillow.', e);
+			continue;
+		}
 
-		// console.log('property', property.streetAddress);
+		console.log('property', property.streetAddress);
 
 		await incognitoPage.close();
 	}
