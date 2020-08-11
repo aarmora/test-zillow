@@ -42,12 +42,12 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 		try {
 			await incognitoPage.waitForSelector('.error-content-block', { timeout: 750 });
 
-			console.log('Looks like we hit reCaptcha in zillow search');
+			console.log('Looks like we hit reCaptcha in zillow search', i);
 
 			continue;
 		}
 		catch (e) {
-
+			console.log('No captcha on ', i);
 		}
 
 
