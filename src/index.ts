@@ -60,7 +60,7 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 			continue;
 		}
 
-		console.log('property', property)
+		console.log('property', property.streetAddress)
 
 		await incognitoPage.close();
 	}
