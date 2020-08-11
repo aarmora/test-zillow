@@ -85,9 +85,6 @@ export async function fetchZillowPropertyData(zpid: number, page: Page, proxy = 
 		"queryId": "38fa1638c8a2fc3dc21a8ee73518f240"
 	};
 	let fetchUrl = `https://www.zillow.com/graphql/?zpid=${zpid}&contactFormRenderParameter=&queryId=38fa1638c8a2fc3dc21a8ee73518f240&operationName=OffMarketFullRenderQuery`;
-	if (proxy) {
-		fetchUrl = `http://api.scrapestack.com/scrape?access_key=${process.env.scrapeStackApiKey}&url=${fetchUrl}`;
-	}
 
 	const propertyData = await page.evaluate(async (payload: any, fetchUrl: string) => {
 		console.log('fetch url', fetchUrl);
