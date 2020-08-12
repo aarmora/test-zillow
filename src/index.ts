@@ -10,7 +10,7 @@ dotenv.config();
 (async () => {
 	puppeteerExtra.use(pluginStealth());
 	const browser = await puppeteerExtra.launch({
-		headless: false,
+		headless: true,
 		ignoreHTTPSErrors: true,
 		args: [
 			'--no-sandbox',
