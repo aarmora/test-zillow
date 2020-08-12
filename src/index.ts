@@ -10,7 +10,7 @@ dotenv.config();
 (async () => {
 	puppeteerExtra.use(pluginStealth());
 	const browser = await puppeteerExtra.launch({
-		headless: true,
+		headless: false,
 		ignoreHTTPSErrors: true,
 		args: [
 			'--no-sandbox',
@@ -20,7 +20,7 @@ dotenv.config();
 
 	for (let i = 0; i < 10; i++) {
 		const context = await browser.createIncognitoBrowserContext();
-		const incognitoPage = await context.newPage();
+		const incognitoPage: Page = await context.newPage();
 
 		await incognitoPage.authenticate({
 			username: process.env.luminatiUsername,
@@ -53,6 +53,7 @@ dotenv.config();
 			await incognitoPage.waitForSelector('.error-content-block', { timeout: 750 });
 
 			console.log('Looks like we hit reCaptcha in zillow search', i);
+			await context.close();
 
 			continue;
 		}
@@ -60,13 +61,13 @@ dotenv.config();
 			console.log('No captcha on ', i);
 		}
 
-
 		let property: any;
 		try {
 			property = await fetchZillowPropertyData(parseInt(zpid), incognitoPage);
 		}
 		catch (e) {
 			console.log('error fetching zillow from zillow.', e);
+			await context.close();
 			continue;
 		}
 
@@ -98,14 +99,20 @@ export async function fetchZillowPropertyData(zpid: number, page: Page, proxy = 
 
 	const propertyData = await page.evaluate(async (payload: any, fetchUrl: string) => {
 		console.log('fetch url', fetchUrl);
-
-		const response = await fetch(fetchUrl, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(payload)
-		});
+		let response;
+		try {
+			response = await fetch(fetchUrl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(payload)
+			});
+		}
+		catch (e) {
+			console.log('Error in the fetch', e);
+			throw 'Error in the fetch';
+		}
 
 		return await response.json();
 
